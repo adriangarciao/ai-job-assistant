@@ -1,15 +1,15 @@
 package adriangarciao.ai_job_app_assistant.JWTUtility;
 
-import adriangarciao.ai_job_app_assistant.repository.UserRepository;
 import adriangarciao.ai_job_app_assistant.security.AppPrincipal;
 import adriangarciao.ai_job_app_assistant.service.JwtService;
-import io.jsonwebtoken.JwtException;
 import java.io.IOException;
-import java.util.List;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,17 +21,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthFilter.class);
 
     private final JwtService jwtService;
-    private final UserRepository userRepository;
 
-    public JwtAuthFilter(JwtService jwtService, UserRepository userRepository) {
+    public JwtAuthFilter(JwtService jwtService) {
         this.jwtService = jwtService;
-        this.userRepository = userRepository;
     }
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+        @Override
+        protected void doFilterInternal(@NonNull HttpServletRequest req, @NonNull HttpServletResponse res, @NonNull FilterChain chain)
             throws ServletException, IOException {
 
         // 1) Let CORS preflight pass
@@ -71,6 +70,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String role = body.get("role", String.class);
             if (email == null || uid == null || role == null) {
                 // malformed token → skip auth
+                log.warn("JWT missing required claims: email={}, uid={}, role={}", email, uid, role);
                 chain.doFilter(req, res);
                 return;
             }
@@ -84,6 +84,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         } catch (io.jsonwebtoken.JwtException e) {
             // invalid/expired → leave unauthenticated
+            log.warn("Invalid or expired JWT: {}", e.getMessage());
             SecurityContextHolder.clearContext();
         }
 

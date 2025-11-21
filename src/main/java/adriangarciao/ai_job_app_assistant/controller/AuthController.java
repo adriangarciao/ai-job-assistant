@@ -28,9 +28,14 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -62,6 +67,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest req,
                                                  HttpServletResponse res) {
+        log.info("Register endpoint called for email: {}", req.email());
         if (userRepository.existsByEmail(req.email())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new AuthResponse("Email already in use"));

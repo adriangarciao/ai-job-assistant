@@ -10,13 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 public class  MeController {
+
+        private static final Logger log = LoggerFactory.getLogger(MeController.class);
     private final UserRepository userRepository;
     public MeController(UserRepository userRepository){ this.userRepository = userRepository; }
 
     @GetMapping("/api/me")
     public ResponseEntity<?> me(Authentication auth) {
+                log.info("Me endpoint called for user: {}", auth.getName());
         String email = auth.getName();  // principal is email from your filter
         return userRepository.findByEmail(email)
                 .<ResponseEntity<?>>map(u -> ResponseEntity.ok(Map.of(

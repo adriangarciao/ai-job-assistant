@@ -18,9 +18,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService users;
 
@@ -34,6 +39,7 @@ public class UserController {
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserDTO> me(@AuthenticationPrincipal AppPrincipal me) {
+        log.info("UserController /me endpoint called for user id: {}", me.id());
         return ResponseEntity.ok(users.getUserById(me.id()));
     }
 

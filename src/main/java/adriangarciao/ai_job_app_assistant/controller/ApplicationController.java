@@ -23,9 +23,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/applications")
 public class ApplicationController {
+
+    private static final Logger log = LoggerFactory.getLogger(ApplicationController.class);
 
     private final ApplicationService applicationService;
     private final UserRepository userRepository;
@@ -57,6 +62,7 @@ public class ApplicationController {
     @PostMapping
     public ResponseEntity<ApplicationDTO> createMyApplication(@Valid @RequestBody ApplicationCreateDTO dto,
                                                               Authentication auth) {
+        log.info("Create application endpoint called for user: {}", auth.getName());
         Long userId = currentUserId(auth);
         ApplicationDTO created = applicationService.createForUser(userId, dto);
         return ResponseEntity.ok(created);

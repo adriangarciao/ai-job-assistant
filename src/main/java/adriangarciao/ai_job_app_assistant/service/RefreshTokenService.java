@@ -13,8 +13,13 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class RefreshTokenService {
+
+    private static final Logger log = LoggerFactory.getLogger(RefreshTokenService.class);
 
     private final RefreshTokenRepository repo;
 
@@ -46,6 +51,7 @@ public class RefreshTokenService {
     /** Create a new refresh token for a user */
     @Transactional
     public RefreshToken create(User user) {
+        log.info("Creating refresh token for user id: {}", user.getId());
         String token = generateToken();
         Instant exp = Instant.now().plus(Duration.ofDays(ttlDays));
 

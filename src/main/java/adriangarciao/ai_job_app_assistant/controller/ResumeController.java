@@ -15,9 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.net.URI;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/resumes")
 public class ResumeController {
+
+    private static final Logger log = LoggerFactory.getLogger(ResumeController.class);
 
     private final ResumeService resumeService;
 
@@ -34,6 +39,7 @@ public class ResumeController {
             @RequestPart("file") @NotNull MultipartFile file,
             Authentication auth
     ) {
+        log.info("Resume upload endpoint called for user: {}", auth.getName());
         // principal is email per your JwtAuthFilter
         String email = auth.getName();
         ResumeDTO saved = resumeService.storeForEmail(file, email);

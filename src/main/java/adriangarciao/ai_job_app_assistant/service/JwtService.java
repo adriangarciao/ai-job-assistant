@@ -16,8 +16,13 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class JwtService {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtService.class);
 
     private final Key key;
     private final long expMinutes;
@@ -38,6 +43,7 @@ public class JwtService {
     }
 
     public String generateToken(Long userId, String email, String role) {
+        log.debug("Generating JWT for userId: {}, email: {}", userId, email);
         Instant now = Instant.now();
         return Jwts.builder()
                 .setSubject(email)
