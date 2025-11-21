@@ -47,7 +47,7 @@ public class UserController {
     @PatchMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserDTO> patchMe(@AuthenticationPrincipal AppPrincipal me,
-                                           @RequestBody UserUpdateDTO dto) {
+                                           @Valid @RequestBody UserUpdateDTO dto) {
         return ResponseEntity.ok(users.updateUser(me.id(), dto));
     }
 
@@ -92,7 +92,7 @@ public class UserController {
     @PatchMapping("/{id}")
     @PreAuthorize("@authz.isSelfOrAdmin(#id, principal)")
     public ResponseEntity<UserDTO> patchUser(@PathVariable Long id,
-                                             @RequestBody UserUpdateDTO dto) {
+                                             @Valid @RequestBody UserUpdateDTO dto) {
         return ResponseEntity.ok(users.updateUser(id, dto));
     }
 

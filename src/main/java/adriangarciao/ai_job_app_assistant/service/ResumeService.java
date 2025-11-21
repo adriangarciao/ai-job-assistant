@@ -9,6 +9,8 @@ import adriangarciao.ai_job_app_assistant.model.User;
 import adriangarciao.ai_job_app_assistant.repository.ResumeRepository;
 import adriangarciao.ai_job_app_assistant.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+
+    private static final Logger log = LoggerFactory.getLogger(ResumeService.class);
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
@@ -27,6 +29,7 @@ import java.util.*;
 
 @Service
 public class ResumeService {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ResumeService.class);
 
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
@@ -78,6 +81,7 @@ public class ResumeService {
             }
             Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
+            log.error("Failed to store file for user {}: {}", email, e.getMessage(), e);
             throw new FileStorageException("Failed to store file.", e);
         }
 
@@ -133,6 +137,7 @@ public class ResumeService {
             headers.setContentLength(Files.size(filePath));
             return ResponseEntity.ok().headers(headers).body(resource);
         } catch (IOException e) {
+            log.error("Failed to read stored file for resume {}: {}", id, e.getMessage(), e);
             throw new FileStorageException("Failed to read stored file.", e);
         }
     }
@@ -145,7 +150,9 @@ public class ResumeService {
         Path filePath = Path.of(resume.getStoragePath());
         try {
             Files.deleteIfExists(filePath);
-        } catch (IOException ignored) { }
+        } catch (IOException e) {
+            log.warn("Failed to delete file for resume {}: {}", id, e.getMessage());
+        }
         resumeRepository.deleteById(id);
     }
 

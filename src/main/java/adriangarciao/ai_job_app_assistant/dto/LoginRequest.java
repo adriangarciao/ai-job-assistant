@@ -1,7 +1,9 @@
 package adriangarciao.ai_job_app_assistant.dto;
 
+import jakarta.validation.constraints.*;
+
 public record LoginRequest(
-        String email,
-        String password
+        @Email(message = "Email should be valid") @NotBlank(message = "Email is required") String email,
+        @NotBlank(message = "Password is required") String password
 ) {
 }

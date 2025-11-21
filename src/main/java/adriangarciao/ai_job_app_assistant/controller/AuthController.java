@@ -13,6 +13,7 @@ import adriangarciao.ai_job_app_assistant.service.RefreshTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -59,7 +60,7 @@ public class AuthController {
 
     // ---------- REGISTER ----------
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest req,
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest req,
                                                  HttpServletResponse res) {
         if (userRepository.existsByEmail(req.email())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -84,7 +85,7 @@ public class AuthController {
 
     // ---------- LOGIN ----------
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest req,
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest req,
                                               HttpServletResponse res) {
         User u = userRepository.findByEmail(req.email())
                 .filter(x -> passwordEncoder.matches(req.password(), x.getPasswordHash()))
