@@ -1,31 +1,29 @@
 package adriangarciao.ai_job_app_assistant.controller;
-
+import static org.mockito.Mockito.when;
 import adriangarciao.ai_job_app_assistant.model.Role;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.when;
+ 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MeController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@Import(MeControllerTest.TestConfig.class)
 class MeControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
-    private adriangarciao.ai_job_app_assistant.repository.UserRepository userRepository;
-    @MockBean
-    private adriangarciao.ai_job_app_assistant.service.JwtService jwtService;
     @Autowired
-    private ObjectMapper objectMapper;
+    private adriangarciao.ai_job_app_assistant.repository.UserRepository userRepository;
+    
 
     @Test
     void getMe_returnsOk() throws Exception {
@@ -42,4 +40,18 @@ class MeControllerTest {
         mockMvc.perform(get("/api/me").principal(auth))
                 .andExpect(status().isOk());
     }
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public adriangarciao.ai_job_app_assistant.repository.UserRepository userRepository() {
+            return Mockito.mock(adriangarciao.ai_job_app_assistant.repository.UserRepository.class);
+        }
+
+        @Bean
+        public adriangarciao.ai_job_app_assistant.service.JwtService jwtService() {
+            return Mockito.mock(adriangarciao.ai_job_app_assistant.service.JwtService.class);
+        }
+    }
 }
+

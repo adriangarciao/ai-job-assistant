@@ -1,6 +1,5 @@
 package adriangarciao.ai_job_app_assistant.controller;
 
-import adriangarciao.ai_job_app_assistant.dto.AuthResponse;
 import adriangarciao.ai_job_app_assistant.dto.LoginRequest;
 import adriangarciao.ai_job_app_assistant.dto.RegisterRequest;
 import adriangarciao.ai_job_app_assistant.model.Role;
@@ -13,11 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+ 
 import adriangarciao.ai_job_app_assistant.repository.UserRepository;
 
 import java.util.Optional;
@@ -27,18 +26,23 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+
 @WebMvcTest(AuthController.class)
 @org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc(addFilters = false)
+@Import(AuthControllerTest.TestConfig.class)
 class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
+    @Autowired
     private UserRepository userRepository;
-    @MockBean
+    @Autowired
     private PasswordEncoder passwordEncoder;
-    @MockBean
+    @Autowired
     private JwtService jwtService;
-    @MockBean
+    @Autowired
     private RefreshTokenService refreshTokenService;
     @Autowired
     private ObjectMapper objectMapper;
@@ -107,4 +111,21 @@ class AuthControllerTest {
                 .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isUnauthorized());
     }
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public UserRepository userRepository() { return Mockito.mock(UserRepository.class); }
+
+        @Bean
+        public PasswordEncoder passwordEncoder() { return Mockito.mock(PasswordEncoder.class); }
+
+        @Bean
+        public JwtService jwtService() { return Mockito.mock(JwtService.class); }
+
+        @Bean
+        public RefreshTokenService refreshTokenService() { return Mockito.mock(RefreshTokenService.class); }
+    }
+
 }
+
