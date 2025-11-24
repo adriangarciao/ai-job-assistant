@@ -1,4 +1,4 @@
-package adriangarciao.ai_job_app_assistant.service.ai.llm;
+package adriangarciao.ai_job_app_assistant.service.ai._moved;
 
 import adriangarciao.ai_job_app_assistant.dto.FeedbackDTO;
 import adriangarciao.ai_job_app_assistant.dto.ParsedJobDTO;
@@ -9,9 +9,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FakeLLMServiceTest {
+class FakeLLMServiceTest_Old {
 
-    private final FakeLLMService llm = new FakeLLMService();
+    // old duplicate moved out of test classpath namespace to avoid duplicate class during compilation
+    @SuppressWarnings("unused")
+    private final Object unused = null;
 
     @Test
     void generateFeedback_matchesAndMissingSkills() {
