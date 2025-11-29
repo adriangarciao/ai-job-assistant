@@ -4,19 +4,20 @@
 
 .app-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #1a0033 100%);
+  padding: 2rem;
 }
 
 .content {
-  max-width: 960px;
+  max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
 }
 
 header {
   text-align: center;
   margin-bottom: 2rem;
-  color: white;
+  color: #e0d4ff;
 }
 
 header h1 {
@@ -33,11 +34,12 @@ header h1 {
 
 .form-card,
 .results-card {
-  background: white;
+  background: rgba(30, 15, 50, 0.9);
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 0 40px rgba(124, 58, 237, 0.1);
   margin-bottom: 2rem;
+  border: 1px solid rgba(124, 58, 237, 0.2);
 }
 
 .form-group {
@@ -48,24 +50,27 @@ header h1 {
   display: block;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #e0d4ff;
   font-size: 0.95rem;
 }
 
 .form-group textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid rgba(124, 58, 237, 0.3);
   border-radius: 8px;
   font-family: inherit;
   font-size: 0.95rem;
   resize: vertical;
   transition: border-color 0.2s;
+  background: rgba(15, 10, 30, 0.6);
+  color: #e0d4ff;
 }
 
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #7c3aed;
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.4);
 }
 
 .checkbox-group label {
@@ -94,7 +99,7 @@ header h1 {
 .analyze-button {
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -102,11 +107,12 @@ header h1 {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
 }
 
 .analyze-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.6), 0 4px 12px rgba(124, 58, 237, 0.4);
 }
 
 .analyze-button:disabled {
@@ -132,10 +138,11 @@ header h1 {
 .match-score {
   text-align: center;
   padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
   border-radius: 12px;
   color: white;
   margin-bottom: 2rem;
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.4);
 }
 
 .score-label {
@@ -154,13 +161,13 @@ header h1 {
 .job-details-section {
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
+  background: rgba(15, 10, 30, 0.4);
+  border: 1px solid rgba(124, 58, 237, 0.3);
   border-radius: 8px;
 }
 
 .job-details-section h3 {
-  color: #333;
+  color: #e0d4ff;
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -179,13 +186,13 @@ header h1 {
 
 .job-detail-label {
   font-weight: 600;
-  color: #555;
+  color: #a78bfa;
   min-width: 120px;
   font-size: 0.95rem;
 }
 
 .job-detail-value {
-  color: #333;
+  color: #e0d4ff;
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -193,17 +200,17 @@ header h1 {
 .summary-section {
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.3);
 }
 
 .summary-section h3 {
-  color: #333;
+  color: #e0d4ff;
   margin-bottom: 1rem;
   font-size: 1.3rem;
 }
 
 .summary-section p {
-  color: #555;
+  color: #c4b5fd;
   line-height: 1.6;
   font-size: 1rem;
 }
@@ -213,7 +220,7 @@ header h1 {
 }
 
 .section h3 {
-  color: #333;
+  color: #e0d4ff;
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
@@ -227,10 +234,10 @@ header h1 {
 .section li {
   padding: 0.75rem;
   margin-bottom: 0.5rem;
-  background: #f8f9fa;
-  border-left: 4px solid #667eea;
+  background: rgba(124, 58, 237, 0.1);
+  border-left: 4px solid #7c3aed;
   border-radius: 4px;
-  color: #555;
+  color: #c4b5fd;
   line-height: 1.5;
 }
 
