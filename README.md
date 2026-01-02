@@ -1,5 +1,7 @@
 # AI Job Application Assistant
 
+![Landing screenshot](images/IMAGE_1.png)
+
 ![CI](https://github.com/adriangarciao/ai-job-assistant/actions/workflows/maven.yml/badge.svg?branch=main)
 
 A full-stack Spring Boot application that helps job seekers analyze how well their resume matches job postings. Features intelligent parsing, AI-powered feedback, and job metadata extraction.
