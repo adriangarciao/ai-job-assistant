@@ -47,6 +47,11 @@ class ResumeControllerTest {
         public adriangarciao.ai_job_app_assistant.service.JwtService jwtService() {
             return Mockito.mock(adriangarciao.ai_job_app_assistant.service.JwtService.class);
         }
+
+        @Bean
+        public adriangarciao.ai_job_app_assistant.service.ai.ParserService parserService() {
+            return Mockito.mock(adriangarciao.ai_job_app_assistant.service.ai.ParserService.class);
+        }
     }
 }
 

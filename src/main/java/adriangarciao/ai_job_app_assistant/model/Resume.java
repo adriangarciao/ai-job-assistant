@@ -30,6 +30,8 @@ public class Resume {
 
     // relative path (e.g., "uploads/uuid.pdf"). You can compute abs path from config.
     private String storagePath;
+    @Column(columnDefinition = "text")
+    private String parsedText;
 
     public Resume(){}
 
@@ -104,6 +106,9 @@ public class Resume {
     public void setStoragePath(String storagePath) {
         this.storagePath = storagePath;
     }
+
+    public String getParsedText() { return parsedText; }
+    public void setParsedText(String parsedText) { this.parsedText = parsedText; }
 
     @Override
     public String toString() {

@@ -3,6 +3,12 @@ package adriangarciao.ai_job_app_assistant.controller;
 import adriangarciao.ai_job_app_assistant.dto.ResumeDTO;
 import adriangarciao.ai_job_app_assistant.dto.ResumeUploadResponse;
 import adriangarciao.ai_job_app_assistant.service.ResumeService;
+import adriangarciao.ai_job_app_assistant.service.ai.ParserService;
+import adriangarciao.ai_job_app_assistant.dto.ResumeParseResponse;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.sax.BodyContentHandler;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -14,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +33,11 @@ public class ResumeController {
     private static final Logger log = LoggerFactory.getLogger(ResumeController.class);
 
     private final ResumeService resumeService;
+    private final ParserService parserService;
 
-    public ResumeController(ResumeService resumeService) {
+    public ResumeController(ResumeService resumeService, ParserService parserService) {
         this.resumeService = resumeService;
+        this.parserService = parserService;
     }
 
     /**
@@ -47,6 +57,41 @@ public class ResumeController {
         // 201 Created + Location: /api/resumes/{id}
         return ResponseEntity.created(URI.create("/api/resumes/" + saved.id()))
                 .body(saved);
+    }
+
+    /**
+     * Extract text from PDF/DOCX server-side and return parsed resume DTO fragment.
+     * Endpoint expects authenticated user (Authentication available) but does not store the file.
+     */
+    @PostMapping(path = "/parse", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ResumeParseResponse> parseFile(
+            @RequestPart("file") @NotNull MultipartFile file,
+            Authentication auth
+    ) {
+        // basic validation
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String text = "";
+        String filename = Optional.ofNullable(file.getOriginalFilename()).orElse("file");
+        String lower = filename.toLowerCase();
+
+        try (InputStream in = file.getInputStream()) {
+            // Use Apache Tika to extract text from the uploaded file (PDF, DOCX, etc.)
+            BodyContentHandler handler = new BodyContentHandler(-1);
+            Metadata metadata = new Metadata();
+            AutoDetectParser parser = new AutoDetectParser();
+            parser.parse(in, handler, metadata, new ParseContext());
+            text = handler.toString();
+        } catch (Exception e) {
+            log.error("Failed to extract text from uploaded file: {}", e.getMessage(), e);
+            return ResponseEntity.status(500).build();
+        }
+
+        var parsed = parserService.parseResume(text == null ? "" : text);
+        var resp = new ResumeParseResponse(parsed.rawText(), parsed.skills(), parsed.experiences());
+        return ResponseEntity.ok(resp);
     }
 
     /**

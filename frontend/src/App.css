@@ -1,5 +1,6 @@
 @import './styles/tokens.css';
 @import './styles/base.css';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
 /* Minimalist app styles following the design-first spec */
 .app-container{min-height:100vh;padding:var(--space-4) 0}
@@ -16,6 +17,24 @@ header h1{font-size:var(--fs-h1);margin:0 0 var(--space-2);font-weight:700}
 .form-group label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px;font-weight:600}
 .form-group textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:0;resize:vertical;background:transparent;color:var(--text);line-height:var(--lh-body);transition:border-color var(--dur-fast) ease}
 .form-group textarea:focus{border-color:var(--brown-red);box-shadow:0 4px 12px rgba(167,51,63,0.06)}
+
+/* File import UI */
+.file-import{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;align-items:flex-start}
+.file-import input[type="file"]{font-size:13px}
+.file-input-hidden{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* Styled import button */
+.import-button{display:inline-flex;padding:10px 14px;background:var(--cta);color:#fff;font-weight:700;border-radius:6px;cursor:pointer;border:0;transition:transform 160ms ease,filter 160ms ease,box-shadow 160ms ease;align-items:center;justify-content:center}
+.import-button:hover{transform:translateY(-3px) scale(1.02);filter:brightness(1.03);box-shadow:0 8px 20px rgba(167,51,63,0.12)}
+.import-button:active{transform:translateY(0) scale(0.995)}
+
+.import-name{font-size:13px;color:var(--muted);margin-top:6px}
+.file-import .import-button{color:#fff}
+
+/* Global font */
+body{font-family:'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif}
+.import-name{font-size:13px;color:var(--muted)}
+.import-error{color:var(--burgundy);font-size:13px}
 
 .checkbox-group label{display:flex;align-items:center;gap:8px;color:var(--text);font-weight:400}
 .checkbox-group input[type="checkbox"]{width:18px;height:18px}

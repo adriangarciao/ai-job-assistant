@@ -24,6 +24,26 @@ A full-stack Spring Boot application that helps job seekers analyze how well the
 - **RESTful API**: Clean REST endpoints for all operations
 - **React Frontend**: Modern UI for analyzing resumes against job postings
 
+## Demo
+
+The repository includes demo screenshots showcasing the frontend and analysis results. Images are located under `frontend/public/images`.
+
+- **Frontpage**: the front landing page.
+
+  ![Frontpage](frontend/public/images/frontpage.png)
+
+- **Frontpage (Filled Out)**: the front page with all parameters filled in.
+
+  ![Frontpage Filled Out](frontend/public/images/frontpageFilledOut.png)
+
+- **Results (example 1)**: sample analysis results after running an analysis.
+
+  ![Results 1](frontend/public/images/result1.png)
+
+- **Results (example 2)**: another example of analysis output.
+
+  ![Results 2](frontend/public/images/result2.png)
+
 ## Tech Stack
 
 **Backend:**

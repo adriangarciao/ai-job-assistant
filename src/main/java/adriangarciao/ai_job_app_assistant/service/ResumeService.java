@@ -33,6 +33,7 @@ public class ResumeService {
     private final UserRepository userRepository;
     private final ResumeMapper resumeMapper;
     private final Path uploadRoot;
+    private final adriangarciao.ai_job_app_assistant.service.ai.ParserService parserService;
 
     private static final Set<String> ALLOWED_TYPES = Set.of(
             "application/pdf",
@@ -43,12 +44,14 @@ public class ResumeService {
             ResumeRepository resumeRepository,
             UserRepository userRepository,
             ResumeMapper resumeMapper,
+            adriangarciao.ai_job_app_assistant.service.ai.ParserService parserService,
             @Value("${app.upload.dir:uploads}") String uploadDir
     ) {
         this.resumeRepository = resumeRepository;
         this.userRepository = userRepository;
         this.resumeMapper = resumeMapper;
         this.uploadRoot = Path.of(uploadDir);
+        this.parserService = parserService;
     }
 
     /** Upload for current user (resolved by email from Authentication). */
@@ -93,6 +96,21 @@ public class ResumeService {
         resume.setStoragePath(target.toString());
 
         Resume saved = resumeRepository.save(resume);
+
+        // Attempt to extract text and persist parsed text (best-effort)
+        try (java.io.InputStream in = file.getInputStream()) {
+            org.apache.tika.sax.BodyContentHandler handler = new org.apache.tika.sax.BodyContentHandler(-1);
+            org.apache.tika.metadata.Metadata metadata = new org.apache.tika.metadata.Metadata();
+            org.apache.tika.parser.AutoDetectParser parser = new org.apache.tika.parser.AutoDetectParser();
+            parser.parse(in, handler, metadata, new org.apache.tika.parser.ParseContext());
+            String extracted = handler.toString();
+            var parsed = parserService.parseResume(extracted == null ? "" : extracted);
+            saved.setParsedText(parsed.rawText());
+            resumeRepository.save(saved);
+        } catch (Exception e) {
+            log.warn("Failed to parse and persist resume text for {}: {}", email, e.getMessage());
+        }
+
         return resumeMapper.toDto(saved);
     }
 

@@ -9,4 +9,5 @@ public record ResumeDTO(
         String contentType,
         Long sizeBytes,
         LocalDateTime uploadedAt
+        , String parsedText
 ) {}
